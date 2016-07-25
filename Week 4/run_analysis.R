@@ -52,7 +52,26 @@ main_dataset$Activity <- as.factor(main_dataset$Activity)
 # Assignment Requirement
 # 4. Appropriately labels the data set with descriptive variable names.
 
+names(main_dataset) <- gsub("\\(\\)", "", names(main_dataset))
+names(main_dataset) <- gsub("^t", "Time", names(main_dataset))
+names(main_dataset) <- gsub("^f", "FrequencyDomainSignal", names(main_dataset))
+names(main_dataset) <- gsub("^angle\\(t", "AngleBetweenTime", names(main_dataset))
+names(main_dataset) <- gsub("^angle\\(f", "AngleBetweenFrequency", names(main_dataset))
+names(main_dataset) <- gsub("^angle\\(", "AngleBetween", names(main_dataset))
+names(main_dataset) <- gsub(")", "", names(main_dataset))
+names(main_dataset) <- gsub(",", "And", names(main_dataset))
+names(main_dataset) <- gsub("Acc", "Accelerometer", names(main_dataset))
+names(main_dataset) <- gsub("Gyr", "Gyroscope", names(main_dataset))
+names(main_dataset) <- gsub("Mag", "Magnitude", names(main_dataset))
+names(main_dataset) <- gsub("std", "StandardDeviation", names(main_dataset))
+names(main_dataset) <- gsub("mean", "Mean", names(main_dataset))
+
+write.table(main_dataset, "merged_combined_dataset.txt")
 
 # Assignment Requirement
 # 5. From the data set in step 4, creates a second, independent 
 # tidy data set with the average of each variable for each activity and each subject.
+
+mean_dataset <- main_dataset %>% group_by(Subject, Activity) %>% summarise_each(funs(mean)) 
+
+write.table(mean_dataset, "data_mean_summary.txt")
