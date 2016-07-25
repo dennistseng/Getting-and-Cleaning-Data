@@ -2,6 +2,7 @@
 #This assumes the file downloaded is extracted in the wd
 
 library(dplyr)
+library(utils)
 
 #Load tables
 train_set <- read.table("train/X_train.txt")
@@ -27,7 +28,7 @@ combined_subject <- rbind(train_subject, test_subject)
 combined_dataset <- cbind(combined_set, combined_labels, combined_subject)
 colnames(combined_dataset) <- c(features$V2, "Activity", "Subject")
 
-remove_duplicates <- combined_dataset[, !duplicated(colnames(main_dataset))] 
+remove_duplicates <- combined_dataset[, !duplicated(colnames(combined_dataset))] 
 
 # Assignment Requirement
 # 2. Extracts only the measurements on the mean and standard deviation for each measurement.
@@ -74,4 +75,4 @@ write.table(main_dataset, "merged_combined_dataset.txt")
 
 mean_dataset <- main_dataset %>% group_by(Subject, Activity) %>% summarise_each(funs(mean)) 
 
-write.table(mean_dataset, "data_mean_summary.txt")
+write.table(mean_dataset, "data_mean_summary.txt", row.name = FALSE)
